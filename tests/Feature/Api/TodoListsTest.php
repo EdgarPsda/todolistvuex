@@ -63,7 +63,33 @@ class TodoListsTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('todos', $todoData->toArray());
-
     }
+
+    /** 
+     * @test
+     * @throws \Throwable
+     * @endpoint ['PUT', 'api/v1/todolist/{todo}']
+     */
+    public function testUpdateUserTodo()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->create(User::class);
+        $todo = $this->create(Todo::class, ['user_id' => $user->id]);
+
+        $todoData = $this->make(Todo::class, ['user_id' => $user->id]);
+
+        $response = $this->putJson(route('api.todolist.update', $todo), $todoData->toArray());
+        $response->assertJson([
+            'data' => [
+                'id' => $todo->id,
+                'description' => $todoData->description,
+                'dueDate' => $todoData->due_date,
+                'isDone' => $todoData->is_done
+            ]
+        ]);
+        $this->assertDatabaseHas('todos', $todoData->toArray());
+    }
+    
     
 }

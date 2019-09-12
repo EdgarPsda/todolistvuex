@@ -9,6 +9,6 @@ $factory->define(Todo::class, function (Faker $faker) {
     return [
         'description' => $faker->sentence(),
         'due_date' => $faker->date(),
-        'is_done' => 0
+        'is_done' => false
     ];
 });

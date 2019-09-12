@@ -18,7 +18,7 @@ class TodoResource extends JsonResource
             'id' => $this->id,
             'description' => $this->description,
             'dueDate' => $this->due_date,
-            'isDone' => $this->is_done,
+            'isDone' => false,
             'user' => new UserResource($this->whenLoaded('user')),
         ];
     }

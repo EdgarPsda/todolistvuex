@@ -68,9 +68,10 @@ class TodoListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TodoRequest $request, Todo $todolist)
     {
-        //
+        $todolist->update($request->all());
+        return new TodoResource($todolist);
     }
 
     /**

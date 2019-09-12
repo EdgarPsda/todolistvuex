@@ -72,8 +72,6 @@ class TodoListsTest extends TestCase
      */
     public function testUpdateUserTodo()
     {
-        $this->withoutExceptionHandling();
-
         $user = $this->create(User::class);
         $todo = $this->create(Todo::class, ['user_id' => $user->id]);
 
@@ -90,6 +88,31 @@ class TodoListsTest extends TestCase
         ]);
         $this->assertDatabaseHas('todos', $todoData->toArray());
     }
-    
-    
+
+    /** 
+     * @test
+     * @throws \Throwable
+     * @endpoint ['GET', 'api/v1/todolist/{todo}']
+     */
+    public function testGetAUsersTodo()
+    {
+        $user = $this->create(User::class);
+        $todo = $this->create(Todo::class, ['user_id' => $user->id]);
+
+        $response = $this->getJson(route('api.todolist.show', $todo));
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                [
+                    'id' => $todo->id,
+                    'description' => $todo->description,
+                    'dueDate' => $todo->due_date,
+                    'isDone' => $todo->is_done,
+                    'user' => [
+                        'id' => $todo->user->id
+                    ]
+                ]
+            ]
+        ]);
+    }
 }

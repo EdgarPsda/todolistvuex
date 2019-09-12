@@ -80,9 +80,10 @@ class TodoListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Todo $todolist)
     {
-        //
+        $todolist->delete();
+        return response([], 204);
     }
 
     public function todosByUser($user)

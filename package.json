@@ -26,6 +26,10 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "eslint": "^6.3.0"
+        "@babel/polyfill": "^7.6.0",
+        "es6-promise": "^4.2.8",
+        "eslint": "^6.3.0",
+        "vue2-datatable-component": "^2.3.1",
+        "vuex": "^3.1.1"
     }
 }

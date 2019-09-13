@@ -6,7 +6,11 @@
 
 require('./bootstrap');
 
+import store from './store'
+import Datatable from 'vue2-datatable-component'
+
 window.Vue = require('vue');
+Vue.use(Datatable)
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,6 +24,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('todo-index', require('./views/todos/index.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -28,5 +33,5 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app',
-});
+    store
+}).$mount('#app')

@@ -10,5 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
-Route::get('todolist', 'Web\TodoListController@index')->name('todolist.index');
+Route::middleware('auth')->group(function () {
+    Route::get('todolist', 'Web\TodoListController@index')->name('todolist.index');
+    Route::get('/home', 'HomeController@index')->name('home');
+});

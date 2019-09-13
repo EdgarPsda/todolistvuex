@@ -13,6 +13,5 @@
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
-    Route::get('todolist', 'Web\TodoListController@index')->name('todolist.index');
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/', 'Web\TodoListController@index')->name('todolist.index');
 });

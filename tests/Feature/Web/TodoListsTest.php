@@ -11,6 +11,8 @@ class TodoListsTest extends TestCase
     /** @test */
     public function testCanVisitIndex()
     {
+        $this->signIn();
+        $this->withoutExceptionHandling();
         $response = $this->get(route('todolist.index'));
         $response->assertOk();
     }

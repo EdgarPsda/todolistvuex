@@ -89,7 +89,7 @@ class TodoListController extends Controller
     public function todosByUser($user)
     {
         $todos = Todo::where('user_id', $user)->with('user')->get();
-        
+
         return TodoResource::collection($todos);
     }
 }

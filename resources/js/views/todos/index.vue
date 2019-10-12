@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3>My To-Do List</h3>
+            <h3>My Tasks</h3>
           </div>
           <table class="table table-striped">
             <thead>
@@ -34,7 +34,7 @@
             </tbody>
           </table>
           <div class="panel-footer">
-            <button class="btn btn-primary" @click="openModal('post')">Add ToDo</button>
+            <button class="btn btn-primary" @click="openModal('post')">Add task</button>
           </div>
         </div>
       </div>
@@ -42,7 +42,42 @@
 
     <!-- Modal -->
     <modal :options="modal">
-
+      <div slot="body">
+        <form @submit.prevent>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              name="description"
+              cols="30"
+              rows="3"
+              :value="data.description"
+              @input="updateDescription"
+            ></textarea>
+            <div
+              v-if="errors.description"
+              class="alert alert-danger"
+              role="alert"
+            >{{ errors }}</div>
+          </div>
+          <div class="form-group">
+            <label for="dueDate">Due date</label>
+            <input
+              type="date"
+              class="form-control"
+              name="dueDate"
+              :value="data.dueDate"
+              @input="updateDueDate"
+            />
+            <div
+              v-if="errors.message"
+              class="alert alert-danger"
+              role="alert"
+            >{{ errors.due_date[0] }}</div>
+          </div>
+        </form>
+      </div>
     </modal>
   </div>
 </template>
@@ -54,11 +89,12 @@ import Modal from "../../components/Modal";
 export default {
   data() {
     return {
-      modal:{
+      modal: {
         title: "",
         btnClass: "",
         btnTitle: ""
-      }
+      },
+      actionType: ""
     };
   },
   props: {
@@ -72,26 +108,62 @@ export default {
   },
 
   computed: {
-    ...mapGetters("Todo", ["data"])
+    ...mapGetters("Todo", ["data", "errors"])
   },
 
   methods: {
-    ...mapActions("Todo", ["fetchData"]),
+    ...mapActions("Todo", [
+      "fetchData",
+      "setDescription",
+      "setDueDate",
+      "setUserId",
+      "storeData",
+      "resetState",
+      "setError"
+    ]),
 
-    openModal(action){
-      if(action === "post"){
-        this.modal.title = "Create a To-Do";
+    openModal(action) {
+      if (action === "post") {
+        this.actionType = "post";
+        this.modal.title = "Create a Task";
         this.modal.btnClass = "btn-primary";
-        this.modal.btnTitle = "Save";
-
+        this.modal.btnTitle = "Save task";
       }
 
       $("#modal").modal("show");
     },
+    updateDescription(e) {
+      this.setDescription(e.target.value);
+    },
+    updateDueDate(e) {
+      this.setDueDate(e.target.value);
+    },
+    formAction() {
+      if (this.actionType == "post") {
+        this.setUserId(this.user);
+        this.storeData()
+          .then(() => {
+            this.fetchData(this.user);
+            this.setError;
+            $("#modal").modal("hide");
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    eventRegistration() {
+      Event.$on("modal:submit", () => {
+        this.formAction();
+      });
+    }
   },
 
-  components:{
+  components: {
     Modal
+  },
+  mounted() {
+    this.eventRegistration();
   }
 };
 </script>

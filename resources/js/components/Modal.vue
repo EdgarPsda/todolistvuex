@@ -9,10 +9,17 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">...</div>
+        <div class="modal-body">
+          <slot name="body"></slot>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" :class="['btn']">Save changes</button>
+          <button
+            type="button"
+            :class="['btn', options.btnClass]"
+            v-text="options.btnTitle"
+            @click="submit"
+          ></button>
         </div>
       </div>
     </div>
@@ -26,6 +33,11 @@ export default {
   props: {
     options: {
       type: Object
+    }
+  },
+  methods: {
+    submit() {
+      Event.$emit("modal:submit");
     }
   }
 };

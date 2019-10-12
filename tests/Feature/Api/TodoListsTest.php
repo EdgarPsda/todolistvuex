@@ -13,7 +13,7 @@ class TodoListsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** 
+    /**
      * @test
      * @throws \Throwable
      * @endpoint ['GET', 'api/v1/todolist/{user}']
@@ -42,7 +42,7 @@ class TodoListsTest extends TestCase
         ]);
     }
 
-    /** 
+    /**
      * @test
      * @throws \Throwable
      * @endpoint ['POST', 'api/v1/totolist/']
@@ -65,7 +65,7 @@ class TodoListsTest extends TestCase
         $this->assertDatabaseHas('todos', $todoData->toArray());
     }
 
-    /** 
+    /**
      * @test
      * @throws \Throwable
      * @endpoint ['PUT', 'api/v1/todolist/{todo}']
@@ -89,7 +89,7 @@ class TodoListsTest extends TestCase
         $this->assertDatabaseHas('todos', $todoData->toArray());
     }
 
-    /** 
+    /**
      * @test
      * @throws \Throwable
      * @endpoint ['GET', 'api/v1/todolist/{todo}']
@@ -116,7 +116,7 @@ class TodoListsTest extends TestCase
         ]);
     }
 
-    /** 
+    /**
      * @test
      * @throws \Throwable
      * @endpoint ['DELETE', 'api/v1/todolist/{todo}']
@@ -129,5 +129,4 @@ class TodoListsTest extends TestCase
         $this->deleteJson(route('api.todolist.destroy', $todo));
         $this->assertDatabaseMissing('todos', $todo->toArray());
     }
-    
 }

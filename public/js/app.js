@@ -1858,6 +1858,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
@@ -1865,6 +1872,11 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     options: {
       type: Object
+    }
+  },
+  methods: {
+    submit: function submit() {
+      Event.$emit("modal:submit");
     }
   }
 });
@@ -1937,6 +1949,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1946,7 +1993,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         title: "",
         btnClass: "",
         btnTitle: ""
-      }
+      },
+      actionType: ""
     };
   },
   props: {
@@ -1957,20 +2005,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     this.fetchData(this.user);
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("Todo", ["data"])),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("Todo", ["fetchData"]), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("Todo", ["data", "errors"])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("Todo", ["fetchData", "setDescription", "setDueDate", "setUserId", "storeData", "resetState", "setError"]), {
     openModal: function openModal(action) {
       if (action === "post") {
-        this.modal.title = "Create a To-Do";
+        this.actionType = "post";
+        this.modal.title = "Create a Task";
         this.modal.btnClass = "btn-primary";
-        this.modal.btnTitle = "Save";
+        this.modal.btnTitle = "Save task";
       }
 
       $("#modal").modal("show");
+    },
+    updateDescription: function updateDescription(e) {
+      this.setDescription(e.target.value);
+    },
+    updateDueDate: function updateDueDate(e) {
+      this.setDueDate(e.target.value);
+    },
+    formAction: function formAction() {
+      var _this = this;
+
+      if (this.actionType == "post") {
+        this.setUserId(this.user);
+        this.storeData().then(function () {
+          _this.fetchData(_this.user);
+
+          _this.setError;
+          $("#modal").modal("hide");
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      }
+    },
+    eventRegistration: function eventRegistration() {
+      var _this2 = this;
+
+      Event.$on("modal:submit", function () {
+        _this2.formAction();
+      });
     }
   }),
   components: {
     Modal: _components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  mounted: function mounted() {
+    this.eventRegistration();
   }
 });
 
@@ -45329,7 +45409,7 @@ var render = function() {
               _vm._m(0)
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [_vm._v("...")]),
+            _c("div", { staticClass: "modal-body" }, [_vm._t("body")], 2),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
               _c(
@@ -45341,9 +45421,12 @@ var render = function() {
                 [_vm._v("Close")]
               ),
               _vm._v(" "),
-              _c("button", { class: ["btn"], attrs: { type: "button" } }, [
-                _vm._v("Save changes")
-              ])
+              _c("button", {
+                class: ["btn", _vm.options.btnClass],
+                attrs: { type: "button" },
+                domProps: { textContent: _vm._s(_vm.options.btnTitle) },
+                on: { click: _vm.submit }
+              })
             ])
           ])
         ]
@@ -45430,14 +45513,81 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Add ToDo")]
+                [_vm._v("Add task")]
               )
             ])
           ])
         ])
       ]),
       _vm._v(" "),
-      _c("modal", { attrs: { options: _vm.modal } })
+      _c("modal", { attrs: { options: _vm.modal } }, [
+        _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "description" } }, [
+                  _vm._v("Description")
+                ]),
+                _vm._v(" "),
+                _c("textarea", {
+                  staticClass: "form-control",
+                  attrs: {
+                    id: "description",
+                    name: "description",
+                    cols: "30",
+                    rows: "3"
+                  },
+                  domProps: { value: _vm.data.description },
+                  on: { input: _vm.updateDescription }
+                }),
+                _vm._v(" "),
+                _vm.errors.description
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "alert alert-danger",
+                        attrs: { role: "alert" }
+                      },
+                      [_vm._v(_vm._s(_vm.errors))]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "dueDate" } }, [
+                  _vm._v("Due date")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "date", name: "dueDate" },
+                  domProps: { value: _vm.data.dueDate },
+                  on: { input: _vm.updateDueDate }
+                }),
+                _vm._v(" "),
+                _vm.errors.message
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "alert alert-danger",
+                        attrs: { role: "alert" }
+                      },
+                      [_vm._v(_vm._s(_vm.errors.due_date[0]))]
+                    )
+                  : _vm._e()
+              ])
+            ]
+          )
+        ])
+      ])
     ],
     1
   )
@@ -45448,7 +45598,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "panel-heading" }, [
-      _c("h3", [_vm._v("My To-Do List")])
+      _c("h3", [_vm._v("My Tasks")])
     ])
   },
   function() {
@@ -59928,7 +60078,8 @@ Vue.use(vue2_datatable_component__WEBPACK_IMPORTED_MODULE_1__["default"]);
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('todo-index', __webpack_require__(/*! ./views/todos/index.vue */ "./resources/js/views/todos/index.vue")["default"]);
+Vue.component("todo-index", __webpack_require__(/*! ./views/todos/index.vue */ "./resources/js/views/todos/index.vue")["default"]);
+window.Event = new Vue();
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -59937,7 +60088,7 @@ Vue.component('todo-index', __webpack_require__(/*! ./views/todos/index.vue */ "
 
 var app = new Vue({
   store: _store__WEBPACK_IMPORTED_MODULE_0__["default"]
-}).$mount('#app');
+}).$mount("#app");
 
 /***/ }),
 
@@ -60091,10 +60242,17 @@ var debug = "development" !== 'production';
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function initialState() {
   return {
-    data: [],
-    loading: false
+    data: {
+      description: "",
+      dueDate: "",
+      user: {}
+    },
+    loading: false,
+    errors: []
   };
 }
 
@@ -60104,22 +60262,100 @@ var getters = {
   },
   loading: function loading(state) {
     return state.loading;
+  },
+  errors: function errors(state) {
+    return state.errors;
   }
 };
 var actions = {
-  fetchData: function fetchData(_ref, user) {
+  storeData: function storeData(_ref) {
     var commit = _ref.commit,
         state = _ref.state;
-    commit('setLoading', true);
-    axios.get('/api/v1/todolist/' + user.id).then(function (response) {
-      commit('setData', response.data.data);
+    commit("setLoading", true);
+    return new Promise(function (resolve, reject) {
+      var params = new FormData();
+
+      for (var fieldName in state.data) {
+        var fieldValue = state.data[fieldName];
+
+        if (_typeof(fieldValue) !== "object") {
+          params.set(fieldName, fieldValue);
+        } else {
+          if (fieldValue && _typeof(fieldValue[0]) !== "object") {
+            params.set(fieldName, fieldValue);
+          } else {
+            for (var index in fieldValue) {
+              params.set(fieldName + "[" + index + "]", fieldValue[index]);
+            }
+          }
+        }
+      }
+
+      if (_.isEmpty(state.data.description)) {
+        params.set("description", "");
+      } else {
+        params.set("description", state.data.description);
+      }
+
+      if (_.isEmpty(state.data.dueDate)) {
+        params.set("due_date", "");
+      } else {
+        params.set("due_date", state.data.dueDate);
+      }
+
+      if (_.isEmpty(state.data.user)) {
+        params.set("user_id", "");
+      } else {
+        params.set("user_id", state.data.user.id);
+      }
+
+      axios.post("/api/v1/todolist/", params).then(function (response) {
+        commit("resetState");
+        resolve();
+      })["catch"](function (error) {
+        var errors = error.response.data.message || error.message;
+        commit("setError", errors);
+        console.log(errors);
+        reject(error);
+      })["finally"](function () {
+        commit("setLoading", false);
+      });
+    });
+  },
+  fetchData: function fetchData(_ref2, user) {
+    var commit = _ref2.commit,
+        state = _ref2.state;
+    commit("setLoading", true);
+    axios.get("/api/v1/todolist/" + user.id).then(function (response) {
+      commit("setData", response.data.data);
     })["catch"](function (error) {
       message = error.response.data.message || error.message;
-      commit('setError', message);
+      commit("setError", message);
       console.log(message);
+      console.log('hay error, desde index.js');
     })["finally"](function () {
-      commit('setLoading', false);
+      commit("setLoading", false);
     });
+  },
+  setDescription: function setDescription(_ref3, value) {
+    var commit = _ref3.commit;
+    commit("setDescription", value);
+  },
+  setDueDate: function setDueDate(_ref4, value) {
+    var commit = _ref4.commit;
+    commit("setDueDate", value);
+  },
+  setUserId: function setUserId(_ref5, user) {
+    var commit = _ref5.commit;
+    commit("setUser", user);
+  },
+  resetState: function resetState(_ref6) {
+    var commit = _ref6.commit;
+    commit("resetState");
+  },
+  setError: function setError(_ref7, value) {
+    var commit = _ref7.commit;
+    commit("setError", value);
   }
 };
 var mutations = {
@@ -60128,6 +60364,21 @@ var mutations = {
   },
   setData: function setData(state, items) {
     state.data = items;
+  },
+  setDescription: function setDescription(state, description) {
+    state.data.description = description;
+  },
+  setDueDate: function setDueDate(state, dueDate) {
+    state.data.dueDate = dueDate;
+  },
+  setUser: function setUser(state, user) {
+    state.data.user = user;
+  },
+  resetState: function resetState(state) {
+    state = Object.assign(state, initialState());
+  },
+  setError: function setError(state, value) {
+    state.errors = value;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -60227,8 +60478,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/hp/visual-studio-workspace/todolistvuex/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/hp/visual-studio-workspace/todolistvuex/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/psdadev/projects/todolistvuex/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/psdadev/projects/todolistvuex/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

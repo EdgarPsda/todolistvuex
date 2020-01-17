@@ -60227,8 +60227,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/hp/visual-studio-workspace/todolistvuex/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/hp/visual-studio-workspace/todolistvuex/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/hp/projects/todolistvuex/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/hp/projects/todolistvuex/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -20,6 +20,7 @@ class TodoListsTest extends TestCase
      */
     public function testGetAllUserTodoList()
     {
+        $this->withoutExceptionHandling();
         $user = $this->create(User::class);
         $todo = $this->create(Todo::class, ['user_id' => $user->id]);
 
@@ -129,5 +130,4 @@ class TodoListsTest extends TestCase
         $this->deleteJson(route('api.todolist.destroy', $todo));
         $this->assertDatabaseMissing('todos', $todo->toArray());
     }
-    
 }

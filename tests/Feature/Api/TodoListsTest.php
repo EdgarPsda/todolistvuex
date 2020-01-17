@@ -20,7 +20,6 @@ class TodoListsTest extends TestCase
      */
     public function testGetAllUserTodoList()
     {
-        $this->withoutExceptionHandling();
         $user = $this->create(User::class);
         $todo = $this->create(Todo::class, ['user_id' => $user->id]);
 
